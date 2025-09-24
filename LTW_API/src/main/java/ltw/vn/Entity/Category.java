@@ -36,4 +36,14 @@ public class Category implements Serializable {
 
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Video> videos;
+
+	public Object getIcon() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setIcon(Object icon) {
+		// TODO Auto-generated method stub
+		
+	}
 }

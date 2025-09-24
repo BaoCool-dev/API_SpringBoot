@@ -1,14 +1,16 @@
 package ltw.vn.Service.Impl;
 
 import java.util.List;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
+import org.thymeleaf.util.StringUtils;
 import ltw.vn.Entity.Category;
 import ltw.vn.Repository.CategoryRepository;
 import ltw.vn.Service.CategoryService;
@@ -17,19 +19,39 @@ import ltw.vn.Service.CategoryService;
 public class CategoryServiceImpl implements CategoryService {
 	@Autowired
 	CategoryRepository categoryRepository;
+	// source -> Generate Constructor using Field, xóa super()
+
+	@Override
+	public <S extends Category> S save(S entity) {
+		if (entity.getCategoryId() == null) {
+			return categoryRepository.save(entity);
+		} else {
+			Optional<Category> opt = findById(entity.getCategoryId());
+			if (opt.isPresent()) {
+				if (StringUtils.isEmpty((String) entity.getIcon())) {
+					entity.setIcon(opt.get().getIcon());
+				} else {
+					// lấy lại images cũ
+					entity.setIcon(entity.getIcon());
+				}
+			}
+			return categoryRepository.save(entity);
+
+		}
+	}
+
+	@Override
+	public Optional<Category> findByCategoryName(String name) {
+		return categoryRepository.findByCategoryName(name);
+	}
 
 	public CategoryServiceImpl(CategoryRepository categoryRepository) {
 		this.categoryRepository = categoryRepository;
 	}
 
 	@Override
-	public List<Category> findAll(Sort sort) {
-		return categoryRepository.findAll(sort);
-	}
-
-	@Override
-	public <S extends Category> S save(S entity) {
-		return categoryRepository.save(entity);
+	public List<Category> findAll() {
+		return categoryRepository.findAll();
 	}
 
 	@Override
@@ -38,8 +60,8 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public List<Category> findAll() {
-		return categoryRepository.findAll();
+	public List<Category> findAll(Sort sort) {
+		return categoryRepository.findAll(sort);
 	}
 
 	@Override
@@ -50,6 +72,11 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public Optional<Category> findById(Long id) {
 		return categoryRepository.findById(id);
+	}
+
+	@Override
+	public <S extends Category> Optional<S> findOne(Example<S> example) {
+		return categoryRepository.findOne(example);
 	}
 
 	@Override
@@ -68,22 +95,15 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public void deleteAll() {
-		categoryRepository.deleteAll();
-	}
-	
-	
-	@Override
-	public List<Category> findByCategorynameContaining(String name) {
-		
-		return categoryRepository.findByCategorynameContaining(name);
+	public List<Category> findByCategoryNameContaining(String name) {
+
+		return categoryRepository.findByCategoryNameContaining(name);
 	}
 
 	@Override
-	public Page<Category> findByCategorynameContaining(String name, Pageable pageable) {
-		return categoryRepository.findByCategorynameContaining(name, pageable);
+	public Page<Category> findByCategoryNameContaining(String name, Pageable pageable) {
+
+		return categoryRepository.findByCategoryNameContaining(name, pageable);
 	}
 
-	
-	
 }

@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @RequestMapping("admin/categories")
 public class CategoryController {
+	private static final String CATEGORY_ID = "categoryId";
 	@Autowired
 	CategoryService categoryService;
 
@@ -57,53 +58,61 @@ public class CategoryController {
 			return new ModelAndView("/admin/categories/addOrEdit");
 		}
 		Category entity = new Category();
-		BeanUtils.copyProperties(cate, entity);
-		categoryService.save(entity);
-		String message = "";
-		if (cate.getIsEdit() == true) {
-			message = "Category da duoc cap nhap thanh cong";
+		// Explicit field mapping
+		entity.setCategoryId(cate.getCategoryId());
+		entity.setCategorycode(cate.getCategorycode());
+		entity.setCategoryname(cate.getCategoryname());
+		entity.setStatus(cate.getStatus());
+		// Handle image upload
+		if (cate.getImageFile() != null && !cate.getImageFile().isEmpty()) {
+			String filename = cate.getImageFile().getOriginalFilename();
+			entity.setImages(filename);
+			// TODO: Save file to storage (implement as needed)
 		} else {
-			message = "Category da duoc them thanh cong";
+			entity.setImages(cate.getImages());
 		}
+		categoryService.save(entity);
+		String message = cate.getIsEdit() ? "Category đã được cập nhật thành công" : "Category đã được thêm thành công";
 		model.addAttribute("message", message);
 		return new ModelAndView("redirect:/admin/categories/list", model);
 	}
 
-	@GetMapping("edit/{categoryId}")
-	public ModelAndView edit(ModelMap model, @PathVariable("categoryId") Long categoryId) {
+	@GetMapping("edit/{" + CATEGORY_ID + "}")
+	public ModelAndView edit(ModelMap model, @PathVariable(CATEGORY_ID) Long categoryId) {
 		Optional<Category> opt = categoryService.findById(categoryId);
 		CategoryModel cate = new CategoryModel();
 		if (opt.isPresent()) {
 			Category entity = opt.get();
-			BeanUtils.copyProperties(entity, cate);
+			cate.setCategoryId(entity.getCategoryId());
+			cate.setCategorycode(entity.getCategorycode());
+			cate.setCategoryname(entity.getCategoryname());
+			cate.setImages(entity.getImages());
+			cate.setStatus(entity.getStatus());
 			cate.setIsEdit(true);
 			model.addAttribute("category", cate);
 			return new ModelAndView("admin/categories/addOrEdit", model);
-
 		}
-		model.addAttribute("message", "Category khong ton tai");
+		model.addAttribute("message", "Category không tồn tại");
 		return new ModelAndView("redirect:/admin/categories", model);
-
 	}
 
-	@GetMapping("delete/{categoryId}")
-	public ModelAndView delete(ModelMap model, @PathVariable("categoryId") Long categoryId) {
+	@GetMapping("delete/{" + CATEGORY_ID + "}")
+	public ModelAndView delete(ModelMap model, @PathVariable(CATEGORY_ID) Long categoryId) {
 		categoryService.deleteById(categoryId);
 		model.addAttribute("message", "Category đã được xóa thành công");
 		return new ModelAndView("redirect:/admin/categories", model);
 	}
-	
+
 	@GetMapping("search")
 	public String search(ModelMap model, @RequestParam(name = "name", required = false) String name) {
 		List<Category> list = null;
 		if (StringUtils.hasText(name)) {
-			list = categoryService.findByCategorynameContaining(name);
+			list = categoryService.findByCategoryNameContaining(name);
 		} else {
 			list = categoryService.findAll();
 		}
 		model.addAttribute("categories", list);
 		return "admin/categories/search";
-
 	}
 
 	@RequestMapping("searchpagenated")
@@ -114,10 +123,10 @@ public class CategoryController {
 		int currentPage = page.orElse(1);
 		int pageSize = size.orElse(3);
 
-		Pageable pageable = PageRequest.of(currentPage - 1, pageSize, Sort.by("categoryId"));
+		Pageable pageable = PageRequest.of(currentPage - 1, pageSize, Sort.by(CATEGORY_ID));
 		Page<Category> resultPage = null;
 		if (StringUtils.hasText(name)) {
-			resultPage = categoryService.findByCategorynameContaining(name, pageable);
+			resultPage = categoryService.findByCategoryNameContaining(name, pageable);
 			model.addAttribute("name", name);
 
 		} else {

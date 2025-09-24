@@ -2,16 +2,13 @@ package ltw.vn.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-
 import ltw.vn.Entity.Category;
 
 public interface CategoryService {
-
-	void deleteAll();
 
 	void delete(Category entity);
 
@@ -19,20 +16,24 @@ public interface CategoryService {
 
 	long count();
 
+	<S extends Category> Optional<S> findOne(Example<S> example);
+
 	Optional<Category> findById(Long id);
 
 	List<Category> findAllById(Iterable<Long> ids);
 
-	List<Category> findAll();
+	List<Category> findAll(Sort sort);
 
 	Page<Category> findAll(Pageable pageable);
 
+	List<Category> findAll();
+
+	Optional<Category> findByCategoryName(String name);
+
 	<S extends Category> S save(S entity);
 
-	List<Category> findAll(Sort sort);
+	Page<Category> findByCategoryNameContaining(String name, Pageable pageable);
 
-	Page<Category> findByCategorynameContaining(String name, Pageable pageable);
-
-	List<Category> findByCategorynameContaining(String name);
+	List<Category> findByCategoryNameContaining(String name);
 
 }
