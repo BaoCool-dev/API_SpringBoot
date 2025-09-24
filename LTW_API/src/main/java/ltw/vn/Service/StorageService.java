@@ -14,6 +14,7 @@ public interface StorageService {
 	Resource loadAsResource(String filename);
 
 	void store(MultipartFile file, String storeFilename);
+	
 
 	String getSorageFilename(MultipartFile file, String id);
 

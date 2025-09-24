@@ -72,7 +72,7 @@ public class CategoryAPIController {
 				storageService.store(icon, category.getIcon());
 			}
 
-			category.setCategoryName(categoryName);
+			category.setCategoryname(categoryName);
 
 			categoryService.save(category);
 			// return ResponseEntity.ok().body(category);
@@ -101,7 +101,7 @@ public class CategoryAPIController {
 				storageService.store(icon, optCategory.get().getIcon());
 			}
 
-			optCategory.get().setCategoryName(categoryName);
+			optCategory.get().setCategoryname(categoryName);
 			categoryService.save(optCategory.get());
 			// return ResponseEntity.ok().body(category);
 			return new ResponseEntity<Response>(new Response(true, "Cập nhật Thành công", optCategory.get()),

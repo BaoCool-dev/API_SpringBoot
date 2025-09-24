@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "categories") 
+@Table(name = "categories")
 public class Category implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -20,7 +20,7 @@ public class Category implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "CategoryId")
-	private Long  categoryId;
+	private Long categoryId;
 
 	@Column(name = "CategoryCode", columnDefinition = "nvarchar(255)")
 	private String categorycode;
@@ -33,17 +33,76 @@ public class Category implements Serializable {
 
 	@Column(name = "Status")
 	private Boolean status;
+	@Column(name = "Icon")
+	private String icon;
+
 
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Video> videos;
 
-	public Object getIcon() {
-		// TODO Auto-generated method stub
-		return null;
+	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<Product> productes;
+
+	public Long getCategoryId() {
+		return categoryId;
 	}
 
-	public void setIcon(Object icon) {
-		// TODO Auto-generated method stub
-		
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
 	}
+
+	public String getCategorycode() {
+		return categorycode;
+	}
+
+	public void setCategorycode(String categorycode) {
+		this.categorycode = categorycode;
+	}
+
+	public String getCategoryname() {
+		return categoryname;
+	}
+
+	public void setCategoryname(String categoryname) {
+		this.categoryname = categoryname;
+	}
+
+	public String getImages() {
+		return images;
+	}
+
+	public void setImages(String images) {
+		this.images = images;
+	}
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
+
+	public Set<Video> getVideos() {
+		return videos;
+	}
+
+	public void setVideos(Set<Video> videos) {
+		this.videos = videos;
+	}
+
+	public Set<Product> getProductes() {
+		return productes;
+	}
+
+	public void setProductes(Set<Product> productes) {
+		this.productes = productes;
+	}
+	public String getIcon() {
+		return icon;
+	}
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+
 }
