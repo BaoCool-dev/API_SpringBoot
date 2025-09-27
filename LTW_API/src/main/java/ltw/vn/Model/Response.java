@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Response {
-	private Boolean status;
-	private String message;
-	private Object body;
+	private Boolean status; 
+	private String message; 
+	private Object body; 
 }

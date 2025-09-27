@@ -4,7 +4,6 @@ import java.util.List;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +16,7 @@ import ltw.vn.Service.CategoryService;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
-	@Autowired
+
 	CategoryRepository categoryRepository;
 	// source -> Generate Constructor using Field, xóa super()
 
@@ -28,7 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
 		} else {
 			Optional<Category> opt = findById(entity.getCategoryId());
 			if (opt.isPresent()) {
-				if (StringUtils.isEmpty((String) entity.getIcon())) {
+				if (StringUtils.isEmpty(entity.getIcon())) {
 					entity.setIcon(opt.get().getIcon());
 				} else {
 					// lấy lại images cũ

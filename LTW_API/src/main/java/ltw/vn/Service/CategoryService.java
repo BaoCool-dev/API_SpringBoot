@@ -10,6 +10,10 @@ import ltw.vn.Entity.Category;
 
 public interface CategoryService {
 
+	Page<Category> findByCategoryNameContaining(String name, Pageable pageable);
+
+	List<Category> findByCategoryNameContaining(String name);
+
 	void delete(Category entity);
 
 	void deleteById(Long id);
@@ -31,9 +35,5 @@ public interface CategoryService {
 	Optional<Category> findByCategoryName(String name);
 
 	<S extends Category> S save(S entity);
-
-	Page<Category> findByCategoryNameContaining(String name, Pageable pageable);
-
-	List<Category> findByCategoryNameContaining(String name);
 
 }

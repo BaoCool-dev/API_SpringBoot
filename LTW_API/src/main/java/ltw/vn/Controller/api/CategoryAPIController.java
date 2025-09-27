@@ -1,7 +1,7 @@
 package ltw.vn.Controller.api;
 
-
 import java.util.Optional;
+
 
 import java.util.UUID;
 
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam; 
 import org.springframework.web.bind.annotation.RestController; 
 import org.springframework.web.multipart.MultipartFile; 
+
 import ltw.vn.Entity.Category;
 import ltw.vn.Model.Response;
 import ltw.vn.Service.CategoryService;
@@ -72,7 +73,7 @@ public class CategoryAPIController {
 				storageService.store(icon, category.getIcon());
 			}
 
-			category.setCategoryname(categoryName);
+			category.setCategoryName(categoryName);
 
 			categoryService.save(category);
 			// return ResponseEntity.ok().body(category);
@@ -101,7 +102,7 @@ public class CategoryAPIController {
 				storageService.store(icon, optCategory.get().getIcon());
 			}
 
-			optCategory.get().setCategoryname(categoryName);
+			optCategory.get().setCategoryName(categoryName);
 			categoryService.save(optCategory.get());
 			// return ResponseEntity.ok().body(category);
 			return new ResponseEntity<Response>(new Response(true, "Cập nhật Thành công", optCategory.get()),
